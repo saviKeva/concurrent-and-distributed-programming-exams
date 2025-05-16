@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "queue": "cpp",
-        "xlocale": "cpp",
-        "iosfwd": "cpp"
-    }
-}
