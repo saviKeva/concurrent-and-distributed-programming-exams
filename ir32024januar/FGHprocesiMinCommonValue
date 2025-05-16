@@ -1,0 +1,64 @@
+using namespace std;
+//nizovi su rastuce uredjeni
+Chan channels[3];
+const int n=6;
+
+
+//nizovi su vec rastuce uredjeni, tako da cemo koristiti binarnu pretragu
+int binPretraga(int a[], int n, int x){
+    int l, d, s;
+    l =0; d= n-1;
+
+    while(l<d){
+        s=(l+d)/2;
+        if(x<a[s]){
+            //element je u donjoj polovini niza
+            d = s-1;
+        }
+        else{
+            if(x>a[s]){
+                //element je u gornjoj polovini niza
+                l = s+1;
+            }else{
+                return s;
+            }
+        }
+    }
+    return -1;
+};
+
+
+void Process(int id){
+    int min1,min2, min;
+
+    min1 = -1;min2=-1; min =-1;
+
+    int received1[n];
+    int received2[n];
+    int myValues[n] ={};
+    for(int i=0;i<n;i++){
+        //saljem svaki clan niza svakom procesu
+        send channels[(id+1)%3](myValues[i]);
+        send channels[(id+2)%3](myValues[i]);
+        //primam nizove druga dva procesa
+        receive channels[(id+1)%3](received1[i]);
+        receive channels[(id+2)%3](received2[i]);
+
+
+        //prvi put kad se clan mog niza nadje u oba niza, 
+        //znam da sam nasla minimun jer su nizovi rastuce uredjeni
+        for(int i=0;i<n;i++){
+            min1 = binPretraga(received1,n,myValues[i]);
+            min2 = binPretraga(received2,n,myValues[i]);
+    
+            if(min1!=min2){
+                continue;
+            }else{
+                min = min1;
+                break;
+            }
+        }
+    }
+};
+   
+    

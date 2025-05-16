@@ -1,0 +1,78 @@
+[Producer::PRODUCER || Consumer(i:1..nc)::CONSUMER ||Buffer::BUFFER]
+
+PRODUCER::[
+
+    *[
+        int item = PRODUCE;
+        Buffer!put(item);
+        Buffer?okToPut();
+    ]
+]
+
+CONSUMER::[
+    *[
+        int newItem;
+        int pos;
+        Buffer?send(newItem,pos);
+        Producer!received(pos);
+        newItem = OBRADA;
+        
+    ]
+]
+
+BUFFER::[
+    int buffCap;
+    int cntRead(0..nc-1);
+    int buff(0..buffCap-1);
+
+    int i;
+    int head =0;
+    int tail =0;
+    int fromPosition;
+    bool
+
+    *[
+        Producer?put(newItem)->[
+            tail<buffCap-1->[
+                Producer!okToPut();
+                buff(tail)=newItem;
+                
+
+            ]
+        ]
+       []
+        tail<buffcap-> [
+            i=0;
+            *[
+                i<nc ->[
+                    Consumer(i)!send(buff(tail),tail);
+                    i++;
+                ]
+               
+                
+            ]
+            tail++;
+        ]
+        []
+         Consumer(i)?received(fromPosition)->[
+            cntRead(fromPosition)++;
+            int i=0;
+            int allRead;
+            *[
+                i<buffCap->[
+                    cntRead(i) ==nc->[
+                        allRead++
+                    ]
+                    i++;
+                ]
+            ]
+            tail>=buffcap-1 && Producer(i)->put(newItem)&& allRead==buffCap[
+                Producer!okToPut();
+                buff(0) =newItem;
+                tail=0;
+            ]
+         ]
+        
+        
+    ]
+]
