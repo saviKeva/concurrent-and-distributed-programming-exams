@@ -74,7 +74,7 @@ void reader(){
         read();
         IN("readCnt", &rCnt);
         if(rCnt == 1){
-            OUT("readCnt", &rCnt);
+            OUT("database");
 
         }
         OUT("rCnt", rCnt-1);
