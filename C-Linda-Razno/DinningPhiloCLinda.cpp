@@ -1,13 +1,13 @@
 using namespace std;
-const int Num = 4;
+const int Num = 5;
 void philosopher(int id){
 
     int i;
     while(1){
         think();
         in("room ticket");
-        in("chopstick",i);
-        in("chopstick", (i+1)%Num);
+        in("chopstick",i);//leva viljuska
+        in("chopstick", (i+1)%Num);//desna viljuska
 
         eat();
 
