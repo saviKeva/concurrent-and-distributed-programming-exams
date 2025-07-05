@@ -14,37 +14,66 @@ class Vehicle{
     bool busy;
 };
 
-queue<Vehicle> vehicles;
+
 cond waitingPassengers;
-cond waitingVehicles;
+cond[5] waitingVehiclesE;
+cond[5] waitingVehiclesOut;
 int numPassW;
-int nextP;int nextV;
+int ticketP;int ticketV;
+int nextP, int nextV;
+int numPE=0;
 void vozilo(int id){
     while(true){
-        int myTicket = nextV++;
+        
         if(numPassW == 0 && !vehicles.empty()){
-            waitingVehicles.wait(myTicket);
+            waitingVehiclesE[id].wait();
         }
         waitingPassengers.signal();
 
-        if(!waitingPassenger.empty()){
-            waitingPassenger.signal();
+        while(numPE!=N){
+            waitingPassengersOut[id].wait();
         }
+
+        numPE =0;
+        numPassW=0;
+        i++;
+
+        
     }
     
 
 }
-
+int i=0;
 void posetilac(int id){
     Vehicle vc;
-    int myTicket =next++;
+    int myTicket =ticket++;
     //walk
-    if(vehiqles.empty() || !waitingPassenger.empty()){
+    numPassW++;
+    while(myTicket!=nextP){
+        
+        if(numPassW == 1){
+            waitingVehicles[i].signal();
+        }
         waitingPassengers.wait(myTicket);
     }
-    waitingVehicles.signal();
+    numPassW--;
+    nextP++;
+    numPE++;
+    if(numPE<N && waitingVehiqles.empty() || !waitingPassenger.empty()){
+        waitingPassengers.signal();
+    }else{
+        waitingPassengersOut[i].signal();
+        /*numPE =0;
+        numPassW=0;
+        i++;*/
+        
+    }
+    
     
     //drive
+
+    
+    
 
 }
 
