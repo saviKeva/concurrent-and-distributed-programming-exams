@@ -7,24 +7,43 @@
 //serverski proces se blokira na "in" dok ne stigne zatev od nekog klijenta
 //a klijentski proces ce biti blokiran sve dok serverski proces ne dodje do "ni"
 
-typdef struct DinningPhiloRendezvousModule{
+typdef struct DinningPhiloRendezvousServer{
 
     //deklaracija procedura koje se koriste
-    int state[5]={0};
-    //0-thinking,1-hungry,2-eating
-    sem sem[5] ={0};
 
-    sem mutex =0 ;
+    void dohvatiViljuske(int idF);
+    void vratiViljuske(int idF);
+    
+    const int N = 5;
+    bool jedu[N] ={false};
+    int i;
 
-    const int nPh=5;
+    while(true){
+        in
 
-    void get_fork(int id);
-    void put_fork(int id);
-    void test(int id);
+        dohvatiViljuske(i) and !jedu[(i-1)%N<0? ((i-1)%N +N) :(i-1)%N] and 
+        !jedu[(i+1)%N] ->[
+            jedu[i] = true;
+        ]
 
-    int right(int id);
-    int left(int id);
+        [];
+
+        vratiViljuske(i) ->[
+            jedu[i] = false;
+        ]
+
+        ni
+    }
 
 
-}DinningPhiloRendezvousModule;
+}DinningPhiloRendezvousServer;
+
+void Philososhper(int id){
+    while(true){
+        //think
+        server.dohvatiViljuske(i);
+        //eat
+        server.vratiViljuske(i);
+    }
+}
 

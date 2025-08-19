@@ -25,7 +25,8 @@ class Coordinator{
         int forks[N]={};
         
         queue<pair<int,int>> waiting;
-        int forks[N] = {};
+        // 0 - slobodna viljuska
+        //1 - zauzeta viljuska
 
         while(true){
             p = request.receive();
